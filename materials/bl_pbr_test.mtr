@@ -1,0 +1,235 @@
+// Biel Bestué de Luna 2016, released under WTFPLv2
+
+textures/bl/dev/pbr_00
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+	//roughness   0
+}
+
+textures/bl/dev/pbr_01
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .1
+}
+
+textures/bl/dev/pbr_02
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .2
+}
+
+textures/bl/dev/pbr_03
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .3
+}
+
+textures/bl/dev/pbr_04
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1.0
+    //roughness   .4
+}
+
+textures/bl/dev/pbr_05
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .5
+}
+
+textures/bl/dev/pbr_06
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .6
+}
+
+textures/bl/dev/pbr_07
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .7
+}
+
+textures/bl/dev/pbr_08
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .8
+}
+
+textures/bl/dev/pbr_09
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   .9
+}
+
+textures/bl/dev/pbr_10
+{
+    stone
+	qer_editorimage textures/dev/16gray.png
+	diffusemap textures/dev/16gray.png
+    //specularity 1
+    //roughness   1
+}
+
+textures/bl/glass/unclean
+{
+	noSelfShadow
+	noshadows
+	twosided
+	translucent
+	glass
+	forceoverlays
+
+	qer_editorimage textures/glass/unclean.tga
+
+	{
+                Program           heatHaze.vfp
+                vertexParm              0       time * 0 , time * 0 // texture scrolling
+                vertexParm              1       1.5         // magnitude of the distortion
+                fragmentProgram			heatHaze.vfp
+                fragmentMap             0       _currentRender
+                fragmentMap             1       textures/glass/surface_n.tga // the normal map for distortion
+             
+    }
+
+	{	
+		maskcolor				
+	    map	makealpha(textures/glass/unclean.tga)
+	}
+	
+	/*
+	{
+	    blend gl_dst_alpha, gl_one
+	    maskalpha
+       	cubeMap		env/gen2
+			red		Parm0
+	        green   Parm1
+	        blue	Parm2
+        texgen		reflect
+
+	}
+    */
+    bumpmap heightmap(textures/glass/unclean.tga, 0.1)
+    {
+        blend specularmap
+		map makeIntensity(textures/glass/unclean.tga)
+		//map		colours/white8.tga
+		red     0.26
+        green   0.26
+        blue    0.26
+    }		
+}
+
+textures/bl/glass/cleaner
+{
+	noSelfShadow
+	noshadows
+	twosided
+	translucent
+	glass
+	forceoverlays
+
+	qer_editorimage textures/bl/glass/cleaner.tga
+
+	{
+                Program           heatHaze.vfp
+                vertexParm              0       time * 0 , time * 0 // texture scrolling
+                vertexParm              1       1.5         // magnitude of the distortion
+                fragmentProgram			heatHaze.vfp
+                fragmentMap             0       _currentRender
+                fragmentMap             1       textures/glass/surface_n.tga // the normal map for distortion
+             
+    }
+
+	{	
+		maskcolor				
+	    map	makealpha(textures/glass/cleaner.tga)
+	}
+	/*
+	{
+	    blend gl_dst_alpha, gl_one
+	    maskalpha
+       	cubeMap		env/gen2
+			red		Parm0
+	        green   Parm1
+	        blue	Parm2
+        texgen		reflect
+
+	}
+    */
+    bumpmap heightmap(textures/glass/cleaner.tga, 0.1)
+    {
+        blend specularmap
+		map makeIntensity(textures/glass/cleaner.tga)
+		//map		colours/white8.tga
+		red     0.26
+        green   0.26
+        blue    0.26
+    }		
+}
+
+textures/bl/alphaTest/alphaTestSurf
+{
+	noshadows //it's funny because it doesn't create shadows as a polygon but it does as a shadowmap obstructor
+	twosided
+	{
+		blend	bumpmap
+		map		textures/alphatest/alphatest_n.tga
+	}
+	{
+		blend diffusemap
+		map		makeIntensity(textures/alphatest/alphatest_mask.tga)
+		alphaTest 0.5
+	}
+	{
+		blend	specularmap
+		map		colours/white8.tga
+		red     0.8
+        green   0.8
+        blue    0.8
+	}
+
+}
+
+textures/bl/skies/greatest_sky_evaaar
+{
+	qer_editorimage qer/common/sky.tga
+
+	noFragment
+	noshadows
+	noimpact
+	forceOpaque		
+	{
+		blend			add	
+		cameraCubeMap	env/skies/ouch/ouch
+		texgen			skybox
+	}
+}
