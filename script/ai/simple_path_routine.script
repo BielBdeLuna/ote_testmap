@@ -1,0 +1,136 @@
+#define PHANTOM_SPEED               100
+#define MINIMUM_CRY_TIME            8
+
+#define MOVETYPE_FLY                3
+
+object simple_path_routine {
+
+    boolean AI_TALK;
+    boolean AI_DAMAGE;
+    boolean AI_PAIN;
+    float   AI_SPECIAL_DAMAGE;		// value of "special_damage" on projectile
+    boolean AI_DEAD;
+    boolean AI_ENEMY_VISIBLE;
+    boolean AI_ENEMY_IN_FOV;
+    boolean AI_ENEMY_DEAD;
+    boolean AI_MOVE_DONE;
+    boolean AI_ONGROUND;
+    boolean AI_ACTIVATED;
+    boolean AI_FORWARD;
+    boolean AI_JUMP;
+    boolean AI_DEST_UNREACHABLE;
+    boolean AI_BLOCKED;
+    boolean AI_HIT_ENEMY;
+    boolean AI_OBSTACLE_IN_PATH;
+    boolean AI_PUSHED;
+
+    float   fly_offset;
+    float   enchantment;
+    float   enchantment_vol;
+
+    entity  next_path_stop;
+    entity  current_path_stop;
+
+    void    animState_cry();
+    void    animState_idle();
+
+    float   next_cry_time;
+
+    void    state_begin();
+    void    state_idle();
+    void    state_cry();
+
+    void    init();
+	//void    destroy();
+};
+
+void simple_path_routine::animState_idle() {
+    idleAnim( ANIMCHANNEL_TORSO, "idle" );
+    /*
+    eachFrame {
+		if ( can_run && run && AI_FORWARD )	{ animState( ANIMCHANNEL_LEGS, "Legs_Run", 8 ); }
+		if ( AI_FORWARD )					{ animState( ANIMCHANNEL_LEGS, "Legs_Walk", 8 ); }
+	}
+    */
+}
+
+void simple_path_routine::animState_cry() {
+    sys.println( "will play cry anim" );
+    fadeSound( SND_CHANNEL_VOICE2, -48 , 1 );
+    playAnim( ANIMCHANNEL_TORSO, "sight" );
+
+	while( !animDone( ANIMCHANNEL_TORSO, 8 ) ) {
+        waitFrame();
+	}
+
+    finishAction( "cry_action" );
+    fadeSound( SND_CHANNEL_VOICE2, 0 , 0.5 );
+	animState( ANIMCHANNEL_TORSO, "animState_idle", 8 );
+}
+
+void simple_path_routine::init() {
+    sys.println( "monster initiated" );
+    fly_offset = getFloatKey( "fly_offset" );
+    next_cry_time = sys.getTime() + MINIMUM_CRY_TIME + sys.random( MINIMUM_CRY_TIME );
+    cacheSoundShader( "loop_enchantment" );
+
+    setState( "state_begin" );   
+}
+
+void simple_path_routine::state_begin() {
+    enchantment = startSoundShader( "loop_enchantment", SND_CHANNEL_VOICE2 );
+
+    setMoveType( MOVETYPE_FLY );
+    setFlySpeed( PHANTOM_SPEED );
+    setFlyOffset( fly_offset );
+
+    animState( ANIMCHANNEL_TORSO, "animState_idle", 0 );
+    setState( "state_idle" );
+}
+
+void simple_path_routine::state_idle() {
+    sys.println( "in state_idle" );
+    if ( !current_path_stop ) { current_path_stop = randomPath(); }
+
+	do {
+		//next_path_stop = current_path_stop.randomPath(); //why random path doesn't work?
+        next_path_stop = current_path_stop.getEntityKey( "target" );
+
+	    while( true ) {
+		    moveToEntity( current_path_stop );
+		    waitFrame();
+		    while( !AI_MOVE_DONE ) {
+                
+                if( sys.getTime() >= next_cry_time ) {
+                    setState( "state_cry" );
+                }
+                
+			    waitFrame();
+		    }
+            sys.println( "target " + current_path_stop.getName() + " reached!\n next is: " + ( current_path_stop.getEntityKey( "target" ) ).getName() );
+		    break;
+	    }
+
+	    if ( AI_DEST_UNREACHABLE ) {
+		    // Can't reach
+		    sys.warning( "entity '" + getName() + "' couldn't reach path_corner '" + current_path_stop.getName() + "'" );
+		    waitFrame();
+	    }
+
+		current_path_stop = next_path_stop;
+	} while( !( !current_path_stop ) );
+
+}
+
+void simple_path_routine::state_cry() {
+    sys.println( "in state_cry" );
+    stopMove();
+    animState( ANIMCHANNEL_TORSO, "animState_cry", 0 );
+    waitAction( "cry_action" );
+    next_cry_time = sys.getTime() + MINIMUM_CRY_TIME + sys.random( MINIMUM_CRY_TIME );
+    setState( "state_idle" ); 
+    
+}
+
+
+

@@ -101,98 +101,145 @@ textures/bl/dev/pbr_10
 
 textures/bl/glass/unclean
 {
-	noSelfShadow
-	noshadows
-	twosided
-	translucent
+
+    noSelfShadow
+	//noshadows
+    twosided
+    translucent
 	glass
 	forceoverlays
+    //forceopaque // in case of pseudo-interior mapping
 
 	qer_editorimage textures/glass/unclean.tga
 
+     
+    /*
 	{
+		blend			blend
+		cameraCubeMap	env/skies/intrefl/intrefl
+		texgen			skybox                              //pseudo-interior mapping ?
+	}
+    */
+
+    {
+		blend	bumpmap
+        map addnormals( textures/glass/surface_n.tga, heightmap( textures/glass/unclean.tga, 1.5 ) )
+        //map smoothnormals( smoothnormals( addnormals( textures/glass/surface_n.tga, heightmap( textures/glass/unclean.tga, 16 ) ) ) )
+	}
+
+    {
                 Program           heatHaze.vfp
                 vertexParm              0       time * 0 , time * 0 // texture scrolling
-                vertexParm              1       1.5         // magnitude of the distortion
+                vertexParm              1       2.5         // magnitude of the distortion
                 fragmentProgram			heatHaze.vfp
                 fragmentMap             0       _currentRender
-                fragmentMap             1       textures/glass/surface_n.tga // the normal map for distortion
+                fragmentMap             1       textures/glass/heathaze_n.tga // the normal map for distortion
              
     }
 
-	{	
-		maskcolor				
-	    map	makealpha(textures/glass/unclean.tga)
+    {
+        blend filter
+        map	invertColor( textures/glass/unclean.tga )
+        red         0.8
+        green       1.0 //slight green tint
+        blue        0.9
+    }
+
+    {	
+		blend diffusemap			
+	    map textures/glass/unclean.tga
+        //map		colours/white8.tga
+		//rgb         0.15
 	}
-	
-	/*
+    
 	{
 	    blend gl_dst_alpha, gl_one
-	    maskalpha
-       	cubeMap		env/gen2
-			red		Parm0
-	        green   Parm1
-	        blue	Parm2
+        //blend add
+        maskalpha
+       	cubeMap		env/testmap_1_spec
+		red         0.1
+        green       0.15 //not so slight green tint
+        blue        0.175
         texgen		reflect
 
 	}
-    */
-    bumpmap heightmap(textures/glass/unclean.tga, 0.1)
+    
     {
         blend specularmap
 		map makeIntensity(textures/glass/unclean.tga)
-		//map		colours/white8.tga
-		red     0.26
-        green   0.26
-        blue    0.26
-    }		
+	    //map		colours/white8.tga
+		//rgb       0.26
+    }
 }
 
 textures/bl/glass/cleaner
 {
 	noSelfShadow
-	noshadows
+	//noshadows
 	twosided
 	translucent
 	glass
 	forceoverlays
+    //forceopaque // in case of pseudo-interior mapping
 
 	qer_editorimage textures/bl/glass/cleaner.tga
+
+    /*
+	{
+		blend			blend
+		cameraCubeMap	env/skies/intrefl/intrefl
+		texgen			skybox                              //pseudo-interior mapping ?
+	}
+    */
+
+    {
+		blend	bumpmap
+        map addnormals( textures/glass/surface_n.tga, heightmap( textures/glass/cleaner.tga, 1.5 ) )
+        //map smoothnormals( smoothnormals( addnormals( textures/glass/surface_n.tga, heightmap( textures/glass/cleaner.tga, 16 ) ) ) )
+	}
 
 	{
                 Program           heatHaze.vfp
                 vertexParm              0       time * 0 , time * 0 // texture scrolling
-                vertexParm              1       1.5         // magnitude of the distortion
+                vertexParm              1       2.5         // magnitude of the distortion
                 fragmentProgram			heatHaze.vfp
                 fragmentMap             0       _currentRender
-                fragmentMap             1       textures/glass/surface_n.tga // the normal map for distortion
+                fragmentMap             1       textures/glass/heathaze_n.tga // the normal map for distortion
              
     }
 
-	{	
-		maskcolor				
-	    map	makealpha(textures/glass/cleaner.tga)
+	{
+        blend filter
+        map	invertColor( textures/glass/cleaner.tga )
+        red         0.8
+        green       1.0 //slight green tint
+        blue        0.9
+    }
+
+    {	
+		blend diffusemap			
+	    map textures/glass/cleaner.tga
+        //map		colours/white8.tga
+		//rgb         0.15
 	}
-	/*
+	
 	{
 	    blend gl_dst_alpha, gl_one
+        //blend add
 	    maskalpha
-       	cubeMap		env/gen2
-			red		Parm0
-	        green   Parm1
-	        blue	Parm2
+       	cubeMap		env/testmap_1_spec
+		red         0.1
+        green       0.15 //not so slight green tint
+        blue        0.175
         texgen		reflect
 
 	}
-    */
-    bumpmap heightmap(textures/glass/cleaner.tga, 0.1)
+
     {
         blend specularmap
 		map makeIntensity(textures/glass/cleaner.tga)
 		//map		colours/white8.tga
-		red     0.26
-        green   0.26
-        blue    0.26
+		//rgb    0.26
     }		
 }
 

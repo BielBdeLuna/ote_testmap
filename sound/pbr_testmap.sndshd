@@ -1,0 +1,26 @@
+loop_enchantment {
+	minDistance 0
+	maxDistance	16
+	volume		0
+    looping
+	
+	sound/pbr_testmap/henryfifth.wav
+}
+
+loop_field {
+	minDistance 0
+	maxDistance	24
+	volume		0
+    looping
+	
+	sound/pbr_testmap/magic_field.wav
+}
+
+phantom_cry {
+    minDistance 4
+	maxDistance	64
+	volume		0
+	
+	sound/pbr_testmap/phantom_quick.wav
+
+}

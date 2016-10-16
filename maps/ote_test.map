@@ -2,6 +2,7 @@ Version 2
 // entity 0
 {
 "classname" "worldspawn"
+"call" "pbr_testmap::main"
 // primitive 0
 {
  brushDef3

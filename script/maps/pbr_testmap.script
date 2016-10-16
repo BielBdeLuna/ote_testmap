@@ -1,0 +1,72 @@
+//this script is GPLv3 and it's original author Biel Bestué de Luna 
+//doesn't think it is important who the original author of that script was! :P
+
+/*
+scriptEvent	void 	setAnimation( string anim ); //why this isn't in the general scripting code is beyond any reason //no longer used
+scriptEvent	float 	getAnimationLength();
+*/
+
+namespace pbr_testmap {
+
+    entity phantom;
+    entity enchantment;
+    entity field;
+
+    entity pc1;
+    entity pc2;
+    entity pc3;
+    entity pc4;   
+
+    void init_it_all() {
+        sys.cacheSoundShader ("loop_enchantment");
+        sys.cacheSoundShader ("loop_field");
+        
+        sys.setSpawnArg( "name", "path_corner_1" );
+        sys.setSpawnArg( "target", "path_corner_2" );
+        sys.setSpawnArg( "spawnclass", "idPathCorner" );
+        pc1 = sys.spawn( "path_corner" );
+        pc1.setOrigin( $player1.getWorldOrigin() + '780 0 48' );
+        
+        sys.setSpawnArg( "name", "path_corner_2" );
+        sys.setSpawnArg( "target", "path_corner_3" );
+        sys.setSpawnArg( "spawnclass", "idPathCorner" );
+        pc2 = sys.spawn( "path_corner" );
+        pc2.setOrigin( $player1.getWorldOrigin() + '-96 0 48' );
+
+        sys.setSpawnArg( "name", "path_corner_3" ); 
+        sys.setSpawnArg( "target", "path_corner_4" );
+        sys.setSpawnArg( "spawnclass", "idPathCorner" );       
+        pc3 = sys.spawn( "path_corner" );
+        pc3.setOrigin( pc2.getWorldOrigin() + '0 196 0' );
+
+        sys.setSpawnArg( "name", "path_corner_4" );
+        sys.setSpawnArg( "target", "path_corner_1" ); 
+        sys.setSpawnArg( "spawnclass", "idPathCorner" );  
+        pc4 = sys.spawn( "path_corner" );
+        pc4.setOrigin( pc1.getWorldOrigin() + '0 196 0' );
+
+        sys.setSpawnArg( "name", "the_phantom" );
+        sys.setSpawnArg( "target", "path_corner_2" );
+        phantom = sys.spawn( "phantom_pbr_testmap" );
+        phantom.setOrigin( $player1.getWorldOrigin() + '780 0 48' );
+        phantom.setAngles( '0 180 0' );
+        
+
+        //sys.setSpawnArg( "s_shader", "loop_enchantment" );
+        //enchantment = sys.spawn( "speaker" );
+        //enchantment.setOrigin( phantom.getWorldOrigin() + '0 0 32' );
+        //enchantment.bindPosition( phantom );
+
+        sys.setSpawnArg( "s_shader", "loop_field" );
+        field = sys.spawn( "speaker" );
+        field.setOrigin( phantom.getWorldOrigin() + '0 0 -16' );
+        field.bindToJoint( phantom, "head", 0);
+    }
+
+    void main() {
+        sys.println("        ^2level initiatied");
+        sys.waitFrame();
+        init_it_all();
+        sys.println("        ^4level things spawned and started");
+    }
+}

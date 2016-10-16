@@ -1,0 +1,71 @@
+model pbr_testmap {
+	mesh							models/md5/phantom/mesh.md5mesh
+    channel torso					( *origin )
+
+    anim idle                       models/md5/phantom/idle.md5anim
+	anim sight						models/md5/phantom/sight.md5anim {
+        frame 1				sound_voice phantom_cry
+    }
+}
+
+entityDef phantom_pbr_testmap {									
+	"model"							"pbr_testmap"
+    "scriptobject"					"simple_path_routine"
+
+
+    "blockedRadius"								"10"
+	"blockedMoveTime"							"750"
+	"blockedAttackTime"							"750"
+	
+	"spawnclass"								"idAI"
+	
+	"ambush"									"0"
+	"wait"										"0"
+	"on_activate"								""
+	"walk_on_sight"								"0"
+	"def_projectile"							""
+	"attack_cone"								"70"
+	"attack_accuracy"							"0"
+	"projectile_height_to_distance_ratio"		"0.9"
+	"chatter_min"								"5"
+	"chatter_max"								"10"
+	"chatter_combat_min"						"3"
+	"chatter_combat_max"						"7"
+	"bleed"										"0"
+	"pain_threshold"							"1"
+	"blink_min"									"2.5"
+	"blink_max"									"8.0"
+	"talks"										"0"
+	"look_min"									"-80 -75 0"
+	"look_max"									"80 75 0"
+	"eye_verticle_offset"						"5"
+	"eye_horizontal_offset"						"-8"
+	"eye_focus_rate"							"0.5"
+	"head_focus_rate"							"0.1"
+	"fov"										"170"
+	"kick_force"								"60"
+
+
+	"size"							"24 24 24"
+	"use_aas"						"aas48"
+	"team"							"1"
+	"rank"							"0"
+	"health"						"999999999"
+	"melee_range"					"20"
+	"fly_offset"					"-40"
+	"turn_rate"						"270"
+	"fly_speed"						"140"
+	"offsetModel"					"0 0 16"
+	"fly_seek_scale"				"4"
+	"fly_roll_max"					"45"
+	"fly_roll_scale"				"90"
+	"fly_pitch_scale"				"45"
+	"fly_pitch_max"					"30"
+	
+	"bone_flytilt"					"spine_00"
+
+	"damage_zone head"				"*Head"
+
+	//"snd_ambient"					"monster_demon_lostsoul_ambient"
+
+}
